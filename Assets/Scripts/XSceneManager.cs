@@ -6,7 +6,7 @@ using System.IO;
 public class XSceneManager : MonoBehaviour
 {
     const string SAVE_FILE_NAME = "/saveFile.json";
-    public static XSceneManager instance;
+    public static XSceneManager instance { get; private set; }
     public string currentPlayerName;
 
     [System.Serializable]
