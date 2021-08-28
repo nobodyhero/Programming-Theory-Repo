@@ -20,6 +20,8 @@ public class Vehicle : MonoBehaviour
     protected GameObject goalSpot;
 
     // Properties
+    // [ENCAPSULATION]
+    // - It cannot set the negative value for the variant speed
     public float speed{
         get { return m_Speed; }
         set {
@@ -33,9 +35,12 @@ public class Vehicle : MonoBehaviour
     }
 
     // Awake is called when the script instance is being loaded.
-    // * フィールドの初期化はAwakeの方が良さそうです。
-    //   Awakeでは他のスクリプトやゲームオブジェクトの参照を取得するのはいいですが、
-    //   参照先のAwakeの処理が終わってない可能性がある為、値の取得はやらない方がいいみたいです。
+    // * It seems be better to initialize fields in Awake() than Starrt(). 
+    //   In Awake(), it would be ok to get the referrence to other scripts or game objects,
+    //   but it should avoid to get the value, because the processing of Awake() in referrenced objects might not be finished.
+    
+    // [POLYMORPHISM]
+    // - In order to make this overridden in the child class "protected" is used for this method
     protected void Awake() {
         m_Agent = GetComponent<NavMeshAgent>();
         m_Agent.speed = m_Speed;
@@ -44,8 +49,11 @@ public class Vehicle : MonoBehaviour
     }
 
     // Start is called before the first frame update
+    // [POLYMORPHISM]
+    // - In order to make this overridden in the child class "protected" is used for this method
     protected void Start()
     {
+        // [ABSTRACTION]
         SetStartGoalSpot();
 
         // Setting the spawn position
@@ -56,8 +64,10 @@ public class Vehicle : MonoBehaviour
     }
 
     // Update is called once per frame
+    // Update() is not supposed to be overridden in the child class so it is "private"
     private void Update()
     {
+        // [ABSTRACTION]
         CheckDistanceAndDestroy( goalSpot.transform.position, transform.position);
     }
 

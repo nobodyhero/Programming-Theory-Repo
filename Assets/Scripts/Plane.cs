@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// [INHERITANCE]
+// - This class inherits from the Vehicle class
 public class Plane : Vehicle
 {
     public float heightOffset = 20;
@@ -9,11 +11,16 @@ public class Plane : Vehicle
 
     private Vector3 goalPos;
 
+    // [POLYMORPHISM]
+    // - Overriding parent's Awake() and changing the default speed. Here it is not calling parent's Awake().
     new void Awake() {
         speed = 15.0f;
     }
 
     // Start is called before the first frame update
+    // [POLYMORPHISM]
+    // - Overriding parent's Start() without calling parent's one (base.Start()),
+    //   but it is calling the method declared in the parent's class "SetStartGoalSpot()"
     new void Start()
     {
         SetStartGoalSpot();
@@ -47,6 +54,9 @@ public class Plane : Vehicle
     }
 
     // Update is called once per frame
+    // [POLYMORPHISM?]
+    // - Parent's Update() is private so it is not possible to override,
+    //   therefore this Update() is totally new and only for this class (Plane.cs)
     private void Update()
     {
         transform.position = Vector3.MoveTowards( transform.position, goalPos, Time.deltaTime * speed );
