@@ -9,13 +9,13 @@ public class GameManager : MonoBehaviour
     const float spawnVehicleInterval = 3.0f; 
     
     public TextMeshProUGUI playerNameText;
-    
+
     private GameObject[] vehiclePrefabs;
-    private float startTime;
+    private bool isGamePaused = false;
 
     // Start is called before the first frame update
     void Start()
-    {
+    {   
         string playerName;
 
         if ( XSceneManager.instance != null ) {
@@ -27,9 +27,6 @@ public class GameManager : MonoBehaviour
         playerNameText.text = $"{playerName}'s City";
 
         vehiclePrefabs = Resources.LoadAll<GameObject>( "Prefabs/Vehicles" );
-
-        startTime = Time.time;
-
         StartCoroutine( SponeVehicle( spawnVehicleInterval ) );
 
     }
@@ -44,6 +41,7 @@ public class GameManager : MonoBehaviour
         while ( true ) {
             yield return new WaitForSeconds( waitTime );
             int vehicleIndex = Random.Range( 0, vehiclePrefabs.Length );
+
             Instantiate( vehiclePrefabs[vehicleIndex] );
         }
     }
@@ -51,6 +49,11 @@ public class GameManager : MonoBehaviour
 
     public void BackToMenu() {
         SceneManager.LoadScene( 0 );
+    }
+
+    public void PauseGame() {
+        isGamePaused = !isGamePaused;
+        Time.timeScale = (isGamePaused) ? 0 : 1;
     }
 
 

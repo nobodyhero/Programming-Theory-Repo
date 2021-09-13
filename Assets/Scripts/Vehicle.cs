@@ -16,6 +16,9 @@ public class Vehicle : MonoBehaviour
     private NavMeshAgent m_Agent;
     private GameObject[] spotPrefabs;
 
+    private Light[] lights;
+    private SunLightController sunLightCtlScript;
+
     protected GameObject startSpot;
     protected GameObject goalSpot;
 
@@ -35,7 +38,7 @@ public class Vehicle : MonoBehaviour
     }
 
     // Awake is called when the script instance is being loaded.
-    // * It seems be better to initialize fields in Awake() than Starrt(). 
+    // * It seems be better to initialize fields in Awake() than Start(). 
     //   In Awake(), it would be ok to get the referrence to other scripts or game objects,
     //   but it should avoid to get the value, because the processing of Awake() in referrenced objects might not be finished.
     
@@ -46,6 +49,9 @@ public class Vehicle : MonoBehaviour
         m_Agent.speed = m_Speed;
         m_Agent.acceleration = 999;
         m_Agent.angularSpeed = 999;
+
+        lights = gameObject.GetComponentsInChildren<Light>();
+        sunLightCtlScript = GameObject.Find( "Sun" ).GetComponent<SunLightController>();
     }
 
     // Start is called before the first frame update
@@ -61,6 +67,15 @@ public class Vehicle : MonoBehaviour
 
         // Setting the target position
         m_Agent.destination = goalSpot.transform.position;
+
+        // Setting the light intensity
+        if (sunLightCtlScript.currentHour >= 18 || sunLightCtlScript.currentHour <= 6 ) {
+            foreach ( Light i in lights ) {
+                i.intensity = 10f;
+            }
+        }
+
+
     }
 
     // Update is called once per frame
